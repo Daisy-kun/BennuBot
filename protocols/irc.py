@@ -1,13 +1,12 @@
 #TODO SSL
 plugName = 'IRC'
-plugAdmins = {'irc':[['*titegtnod*@rainbows.inafire.com',1000],['lembas!toastin@inafire.com',1000]
-        ,['*@127.0.0.1',1000]]}
+plugAdmins = {'irc':[['*@69.196.165.57',1000]]}
 
 #TODO Handle join fails properly.
 #TODO Update channels upon kick.
 #TODO Handle nick changes properly (If nick change fails).
 #TODO Announce a successful ";irc die"
-IRCconnections = [[('irc.pho3n1x.net', 6667), '#bottest,#pho3n1x', nick, ['PRIVMSG NickServ :id PASSWORD']]]
+IRCconnections = [[('irc.pho3n1x.net', 6667), '#pho3n1x,#daisy', nick, ['PRIVMSG NickServ :id SlaveInUtero']]]
 IRCdie = False
 
 class ircSendHandler(threading.Thread):
