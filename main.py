@@ -312,7 +312,7 @@ while True:
         #General plugins should prepare for "None".
         handleGenFuncs()
         #As long as plugins are handling their timeouts properly 10ms should be plenty.
-        time.sleep(0.01)
+        time.sleep(0.04)
     else:
         change = False
     for i in inMSG:
