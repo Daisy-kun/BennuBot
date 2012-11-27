@@ -27,6 +27,10 @@ def log(text, location='log'):
     open(location, 'a').write(msg + '\r\n')
 
 def delSetting(table, what, conn=None):
+    #TODO Make a real fix
+    table = table.replace('\'', '')
+    what = what.replace('\'', '')
+
     if not conn:
         conn = sqlite3.connect(dbLoc)
         dontClose = False
@@ -48,6 +52,10 @@ def delSetting(table, what, conn=None):
     return True
 
 def setSetting(table, what, to, conn=None):
+    #TODO Make a real fix
+    table = table.replace('\'', '')
+    what = what.replace('\'', '')
+
     vStr = ''
     tStr = ''
 
@@ -60,7 +68,12 @@ def setSetting(table, what, to, conn=None):
     c = conn.cursor()
 
     for i in to.items():
-        vStr += ",'%s'" % i[1]
+        #TODO Fix this with prepared statements or something
+        if type(i[1]) is str:
+            temp = i[1].replace('\'', '')
+        else:
+            temp = i[1]
+        vStr += ",'%s'" % temp
         if type(i[1]) is str:
             tType = 'text'
         elif type(i[1]) is int:
@@ -82,6 +95,10 @@ def setSetting(table, what, to, conn=None):
         conn.close()
 
 def getSetting(table, what, conn=None):
+    #TODO Make a real fix
+    table = table.replace('\'', '')
+    what = what.replace('\'', '')
+
     out = []
 
     if not conn:
@@ -144,7 +161,7 @@ def loadSettings():
         protoList = ['irc.py'] #Protocols to be loaded
         plugList  = ['say.py', 'pyexec.py', 'irc_commands.py', 'ircop_commands.py', 'time.py',
                      'google.py', 'downloader.py', 'remoteadmin.py', 'titlespam.py', 'tell.py',
-                     'loli.py'] 
+                     'loli.py', 'factoids.py'] 
                                #Plugins to be loaded
 
         protoFolder = 'protocols/'
@@ -282,7 +299,7 @@ class parseCommand(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        if len(self.command[0]) > 1 and self.command[0][0] == funcPrefix:
+        if len(self.command[0]) > 1 and self.command[0][:len(funcPrefix)] == funcPrefix:
             cmd = self.command[0].split(None, 1)[0][len(funcPrefix):].lower()
             if cmd in funcs:
                 try:
@@ -294,7 +311,7 @@ class parseCommand(threading.Thread):
                         self.command[1], self.command[2], self.command[3])
             elif not quiet:
                  sendMSG('Invalid command.', self.command[1], self.command[2], self.command[3])
-        elif len(self.command[0]) > 1 and self.command[0][0] == protoPrefix:
+        elif len(self.command[0]) > 1 and self.command[0][:len(protoPrefix)] == protoPrefix:
             if getPermission(self.command) < 999:
                 if not quiet:
                     sendMSG('Not authorized.', self.command[1], self.command[2],
